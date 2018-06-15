@@ -30,11 +30,11 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
   "runserver command default arguments"
   :type '(repeat string))
 
-(defcustom django-commands-shell-command "shell_plus"
+(defcustom django-commands-shell-command "shell"
   "shell command"
   :type '(string))
 
-(defcustom django-commands-shell-args '("--plain")
+(defcustom django-commands-shell-args '("-i" "python")
   "shell command default arguments"
   :type '(repeat string))
 
