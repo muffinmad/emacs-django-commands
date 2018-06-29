@@ -81,7 +81,10 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
   "Major mode for django command"
   (set (make-local-variable 'comint-output-filter-functions)
        '(ansi-color-process-output
-         python-pdbtrack-comint-output-filter-function)))
+         python-pdbtrack-comint-output-filter-function))
+  (set (make-local-variable 'compilation-error-regexp-alist)
+       python-shell-compilation-regexp-alist)
+  (compilation-shell-minor-mode 1))
 
 (define-derived-mode django-server-mode django-command-mode "Django server"
   "Major mode for `django-server'"
