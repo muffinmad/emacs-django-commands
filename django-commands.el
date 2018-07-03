@@ -110,9 +110,9 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
         nil
       (list "--settings" settings-module))))
 
-(defun django-commands--args (args)
+(defun django-commands--args (args confirm-args)
   (let ((command-args (append (django-commands--settings-args) args)))
-    (if current-prefix-arg
+    (if (or confirm-args current-prefix-arg)
         (save-match-data (split-string (read-from-minibuffer "Args: " (mapconcat 'identity command-args " "))))
       command-args)))
 
@@ -135,7 +135,7 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
 
 (defun django-commands--command (command-name mode command args)
   (let* ((comint-name (concat (projectile-project-name) "-" command-name))
-         (command-args (django-commands--args args))
+         (command-args (django-commands--args args (string= command-name "test")))
          (buffer (django-commands--buffer mode comint-name)))
     (pop-to-buffer-same-window buffer)
     (setq default-directory (projectile-project-root))
