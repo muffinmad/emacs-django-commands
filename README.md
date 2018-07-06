@@ -7,6 +7,15 @@ Alongside with ```python``` and ```which-func``` which is shiped with GNU Emacs 
 
 ## Installation
 
+### With `package.el`
+
+Download `django-commands.el` and run from Emacs:
+``` el
+M-x package-install-file RET <path-to-django-commands-el> RET
+```
+
+### Without `package.el`
+
 Put `django-commands.el` somewhere in your load path and add this to `init.el`:
 
 ``` el
