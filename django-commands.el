@@ -5,7 +5,7 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-django-commands
-;; Package-Version: 0.2.1
+;; Package-Version: 0.2.2
 ;; Package-Requires: (projectile)
 
 ;;; Commentary:
@@ -148,7 +148,7 @@ Allow edit arguments string if CONFIRM-ARGS is not nil or `current-prefix-arg'"
   (with-current-buffer buffer
     (let ((inhibit-read-only t))
       (erase-buffer))
-    (apply 'make-comint-in-buffer comint-name buffer "python" nil (append (list django-commands-manage-module command) args))
+    (apply #'make-comint-in-buffer comint-name buffer "python" nil (append (list django-commands-manage-module command) args))
     (funcall mode)
     (setq
      django--current-command command
@@ -182,14 +182,14 @@ Allow edit arguments string if CONFIRM-ARGS is not nil or `current-prefix-arg'"
   "Run shell command.
 If run with universal argument allow to edit command arguments"
   (interactive)
-  (django-commands--command "shell" 'django-shell-mode django-commands-shell-command django-commands-shell-args))
+  (django-commands--command "shell" #'django-shell-mode django-commands-shell-command django-commands-shell-args))
 
 ;;;###autoload
 (defun django-server ()
   "Run server command.
 If run with universal argument allow to edit command arguments"
   (interactive)
-  (django-commands--command "server" 'django-server-mode django-commands-server-command django-commands-server-args))
+  (django-commands--command "server" #'django-server-mode django-commands-server-command django-commands-server-args))
 
 ;;;###autoload
 (defun django-test ()
