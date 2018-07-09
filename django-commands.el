@@ -1,11 +1,11 @@
-;;; django-commands.el --- Run django commands inside Emacs.
+;;; django-commands.el --- Run django commands inside Emacs -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018 Andrii Kolomoiets
 
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-django-commands
-;; Package-Version: 0.2
+;; Package-Version: 0.2.1
 ;; Package-Requires: (projectile)
 
 ;;; Commentary:
@@ -138,6 +138,9 @@ Allow edit arguments string if CONFIRM-ARGS is not nil or `current-prefix-arg'"
         (save-match-data (split-string (read-from-minibuffer "Args: " (mapconcat 'identity command-args " "))))
       command-args)))
 
+(defvar python-shell--interpreter "python")
+(defvar python-shell--interpreter-args "-i")
+
 (defun django-commands--run-command (buffer comint-name mode command args)
   "Run COMMAND with ARGS in BUFFER with COMINT-NAME in MODE."
   (let ((process (get-buffer-process buffer)))
@@ -146,9 +149,7 @@ Allow edit arguments string if CONFIRM-ARGS is not nil or `current-prefix-arg'"
     (let ((inhibit-read-only t))
       (erase-buffer))
     (apply 'make-comint-in-buffer comint-name buffer "python" nil (append (list django-commands-manage-module command) args))
-    (let ((python-shell--interpreter "python")
-          (python-shell--interpreter-args "-i"))
-      (funcall mode))
+    (funcall mode)
     (setq
      django--current-command command
      django--current-args (mapconcat 'identity args " ")
