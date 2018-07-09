@@ -166,6 +166,7 @@ Allow edit arguments string if CONFIRM-ARGS is not nil or `current-prefix-arg'"
     (setq default-directory (projectile-project-root))
     (django-commands--run-command buffer comint-name mode command command-args)))
 
+;;;###autoload
 (defun django-test-name ()
   "Return name of test case to run."
   (let* ((module-name (save-match-data (split-string (file-relative-name (file-name-sans-extension buffer-file-name) (projectile-project-root)) "[/]")))
