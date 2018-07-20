@@ -5,7 +5,7 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-django-commands
-;; Package-Version: 0.2.2
+;; Package-Version: 0.2.3
 ;; Package-Requires: (projectile)
 
 ;;; Commentary:
@@ -144,7 +144,7 @@ Allow edit arguments string if CONFIRM-ARGS is not nil or `current-prefix-arg'"
 (defun django-commands--run-command (buffer comint-name mode command args)
   "Run COMMAND with ARGS in BUFFER with COMINT-NAME in MODE."
   (let ((process (get-buffer-process buffer)))
-    (when (and process (yes-or-no-p "Kill current command?")) (delete-process process)))
+    (when (and process (yes-or-no-p "Kill current process?")) (delete-process process)))
   (with-current-buffer buffer
     (let ((inhibit-read-only t))
       (erase-buffer))
