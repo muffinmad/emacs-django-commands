@@ -5,7 +5,7 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-django-commands
-;; Package-Version: 0.2.3
+;; Package-Version: 0.2.4
 ;; Package-Requires: (projectile)
 
 ;;; Commentary:
@@ -126,7 +126,7 @@ Erase server output buffer if STRING starts with 'Performing system checks...\n'
 (defun django-commands--settings-args ()
   "Get settings module as argument."
   (let ((settings-module (or django-commands-settings-module (getenv "DJANGO_SETTINGS_MODULE"))))
-    (if (string= "" settings-module)
+    (if (or (not settings-module) (string= "" settings-module))
         nil
       (list "--settings" settings-module))))
 
