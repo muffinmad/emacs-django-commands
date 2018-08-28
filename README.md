@@ -3,7 +3,12 @@ Run django commands in GNU Emacs
 
 ## Dependencies
 
-Alongside with ```python``` and ```which-func``` which is shiped with GNU Emacs this package required [projectile](https://github.com/bbatsov/projectile).
+Packages shiped with GNU Emacs:
+
+* ```compile```
+* ```project```
+* ```python```
+* ```which-func```
 
 ## Installation
 

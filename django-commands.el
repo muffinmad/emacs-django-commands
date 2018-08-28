@@ -5,14 +5,14 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-django-commands
-;; Package-Version: 0.2.4
-;; Package-Requires: (projectile)
+;; Package-Version: 0.2.5
 
 ;;; Commentary:
 
 ;;; Code:
 
-(require 'projectile)
+(require 'compile)
+(require 'project)
 (require 'python)
 (require 'which-func)
 
@@ -159,17 +159,19 @@ Allow edit arguments string if CONFIRM-ARGS is not nil or `current-prefix-arg'"
 
 (defun django-commands--command (command-name mode command args)
   "Run COMMAND with ARGS in MODE. COMMAND-NAME is used to make comint name."
-  (let* ((comint-name (concat (projectile-project-name) "-" command-name))
+  (let* ((project (or (project-current t) (error "No project")))
+         (comint-name (concat (file-name-nondirectory (directory-file-name (cdr project))) "-" command-name))
          (command-args (django-commands--args args (string= command-name "test")))
          (buffer (django-commands--buffer mode comint-name)))
     (pop-to-buffer-same-window buffer)
-    (setq default-directory (projectile-project-root))
+    (setq default-directory (cdr project))
     (django-commands--run-command buffer comint-name mode command command-args)))
 
 ;;;###autoload
 (defun django-test-name ()
   "Return name of test case to run."
-  (let* ((module-name (save-match-data (split-string (file-relative-name (file-name-sans-extension buffer-file-name) (projectile-project-root)) "[/]")))
+  (let* ((project (or (project-current) (error "No project")))
+         (module-name (save-match-data (split-string (file-relative-name (file-name-sans-extension buffer-file-name) (cdr project)) "[/]")))
 		 (func-name (which-function))
          (func-name (when func-name (list func-name))))
 	(mapconcat 'identity (append module-name func-name) ".")))
