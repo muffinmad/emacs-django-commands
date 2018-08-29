@@ -65,11 +65,11 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
   :type 'function)
 
 (defcustom django-commands-server-clear-on-restart t
-  "clear buffer in django server restart"
+  "If nil, don't erase server output buffer on django server restart"
   :type 'boolean)
 
 (defcustom django-commands-server-skip '("GET /static-")
-  "runserver command ignore patterns"
+  "Regexps for output of the 'runserver' command that should be ignored."
   :type '(repeat string))
 
 
