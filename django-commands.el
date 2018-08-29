@@ -69,7 +69,7 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
   :type 'boolean)
 
 (defcustom django-commands-server-skip '("GET /static-")
-  "Regexps for output of the 'runserver' command that should be ignored."
+  "Regexps for 'runserver' command output strings that should be ignored."
   :type '(repeat string))
 
 
