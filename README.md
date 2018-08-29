@@ -3,9 +3,23 @@ Run django commands in GNU Emacs
 
 ## Dependencies
 
-Alongside with ```python``` and ```which-func``` which is shiped with GNU Emacs this package required [projectile](https://github.com/bbatsov/projectile).
+Packages shiped with GNU Emacs:
+
+* ```compile```
+* ```project```
+* ```python```
+* ```which-func```
 
 ## Installation
+
+### With `package.el`
+
+Download `django-commands.el` and run from Emacs:
+``` el
+M-x package-install-file RET <path-to-django-commands-el> RET
+```
+
+### Without `package.el`
 
 Put `django-commands.el` somewhere in your load path and add this to `init.el`:
 
