@@ -5,7 +5,7 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-django-commands
-;; Package-Version: 0.2.5
+;; Package-Version: 0.2.6
 
 ;;; Commentary:
 
@@ -64,6 +64,14 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
   "Function to return name of a test to be run."
   :type 'function)
 
+(defcustom django-commands-server-clear-on-restart t
+  "clear buffer in django server restart"
+  :type 'boolean)
+
+(defcustom django-commands-server-skip '("GET /static-")
+  "runserver command ignore patterns"
+  :type '(repeat string))
+
 
 
 ;; Local vars
@@ -85,14 +93,15 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
 (defun django-server--skip-static (string)
   "Function to filter requests for static files from server output buffer.
 Returns empty string if STRING starts with 'GET /static-'"
-  (if (string-match-p "GET /static-" string) "" string))
+  (cl-flet ((match-pattern (pattern) (string-match-p pattern string)))
+      (if (cl-some #'match-pattern django-commands-server-skip) "" string)))
 
 (defun django-server--clear-on-restart (string)
   "Function to watch for django server restart.
 Erase server output buffer if STRING starts with 'Performing system checks...\n'"
-  (when (string-prefix-p "Performing system checks...\n" string)
-	(let ((inhibit-read-only t))
-	(erase-buffer)))
+  (when (and django-commands-server-clear-on-restart (string-prefix-p "Performing system checks...\n" string))
+    (let ((inhibit-read-only t))
+      (erase-buffer)))
   string)
 
 (define-derived-mode django-command-mode comint-mode "Django command"
@@ -107,8 +116,8 @@ Erase server output buffer if STRING starts with 'Performing system checks...\n'
 (define-derived-mode django-server-mode django-command-mode "Django server"
   "Major mode for `django-server'"
   (set (make-local-variable 'comint-preoutput-filter-functions)
-	   '(django-server--skip-static
-		 django-server--clear-on-restart)))
+       '(django-server--skip-static
+         django-server--clear-on-restart)))
 
 (define-derived-mode django-test-mode django-command-mode "Django test"
   "Major mode for `django-test'")
@@ -120,7 +129,7 @@ Erase server output buffer if STRING starts with 'Performing system checks...\n'
 (defun django-commands--buffer (mode comint-name)
   "Get buffer based on MODE and COMINT-NAME."
   (if (or (not (derived-mode-p mode)) (comint-check-proc (current-buffer)))
-	  (get-buffer-create (generate-new-buffer-name (concat "*" comint-name "*")))
+      (get-buffer-create (generate-new-buffer-name (format "*%s*" comint-name)))
     (current-buffer)))
 
 (defun django-commands--settings-args ()
