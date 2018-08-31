@@ -1,4 +1,4 @@
-;;; django-commands.el --- Run django commands inside Emacs -*- lexical-binding: t; -*-
+;;; django-commands.el --- Run django commands -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018 Andrii Kolomoiets
 
@@ -6,10 +6,26 @@
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-django-commands
 ;; Package-Version: 1.0
+;; Package-Requires: ((emacs "25.1"))
+
+;; This file is NOT part of GNU Emacs.
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 ;;
-;; This package allow to run django commands in GNU Emacs
+;; This package allows to run django commands
 
 ;;; Code:
 
@@ -66,7 +82,7 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
   "Default arguments for test command."
   :type '(repeat string))
 
-(defcustom django-commands-test-name-function #'django-test-name
+(defcustom django-commands-test-name-function #'django-commands-test-name
   "Function to return name of a test to be run."
   :type 'function)
 
@@ -83,25 +99,25 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
   "Erase undo on process output."
   (setq buffer-undo-list nil))
 
-(define-derived-mode django-shell-mode inferior-python-mode "Django shell"
-  "Major mode for `django-shell'"
-  (add-to-list 'comint-output-filter-functions 'comint-truncate-buffer)
-  (add-to-list 'comint-output-filter-functions 'django-commands--clear-undo-output-filter t))
+(define-derived-mode django-commands-shell-mode inferior-python-mode "Django shell"
+  "Major mode for django shell command"
+  (add-to-list 'comint-output-filter-functions #'comint-truncate-buffer)
+  (add-to-list 'comint-output-filter-functions #'django-commands--clear-undo-output-filter t))
 
-(define-derived-mode django-command-mode comint-mode "Django command"
-  "Major mode for django command"
-  (add-to-list 'comint-output-filter-functions 'comint-truncate-buffer)
-  (add-to-list 'comint-output-filter-functions 'django-commands--clear-undo-output-filter t)
-  (add-to-list 'comint-output-filter-functions 'python-pdbtrack-comint-output-filter-function t)
+(define-derived-mode django-commands-command-mode comint-mode "Django command"
+  "Major mode for django commands"
+  (add-to-list 'comint-output-filter-functions #'comint-truncate-buffer)
+  (add-to-list 'comint-output-filter-functions #'django-commands--clear-undo-output-filter t)
+  (add-to-list 'comint-output-filter-functions #'python-pdbtrack-comint-output-filter-function t)
   (set (make-local-variable 'compilation-error-regexp-alist)
        python-shell-compilation-regexp-alist)
   (compilation-shell-minor-mode 1))
 
-(define-derived-mode django-server-mode django-command-mode "Django server"
-  "Major mode for `django-server'")
+(define-derived-mode django-commands-server-mode django-commands-command-mode "Django server"
+  "Major mode for django runserver command")
 
-(define-derived-mode django-test-mode django-command-mode "Django test"
-  "Major mode for `django-test'")
+(define-derived-mode django-commands-test-mode django-commands-command-mode "Django test"
+  "Major mode for django test command")
 
 
 
@@ -146,9 +162,9 @@ Reuse current buffer or buffer with same name without living process otherwise c
 
 (defun django-commands--mode-args (mode)
   "Get command args based on MODE."
-  (cond ((eq mode 'django-server-mode) django-commands-server-args)
-        ((eq mode 'django-shell-mode) django-commands-shell-args)
-        ((eq mode 'django-test-mode) django-commands-test-args)
+  (cond ((eq mode 'django-commands-server-mode) django-commands-server-args)
+        ((eq mode 'django-commands-shell-mode) django-commands-shell-args)
+        ((eq mode 'django-commands-test-mode) django-commands-test-args)
         (t (error "No django command args for mode: %S" (symbol-name mode)))))
 
 (defun django-commands--args (mode &optional args)
@@ -163,29 +179,30 @@ Reuse current buffer or buffer with same name without living process otherwise c
 
 (defun django-commands--mode-command (mode)
   "Get command to execute based on MODE."
-  (cond ((eq mode 'django-server-mode) django-commands-server-command)
-        ((eq mode 'django-shell-mode) django-commands-shell-command)
-        ((eq mode 'django-test-mode) django-commands-test-command)
+  (cond ((eq mode 'django-commands-server-mode) django-commands-server-command)
+        ((eq mode 'django-commands-shell-mode) django-commands-shell-command)
+        ((eq mode 'django-commands-test-mode) django-commands-test-command)
         (t (error "No django command for mode: %S" (symbol-name mode)))))
 
-(defun django-commands--kill-current-process (buffer)
+(defun django-commands--kill-current-process-p (buffer)
   "Return t if new process can be started in BUFFER."
   (let ((process (get-buffer-process buffer)))
     (if process
         (and (yes-or-no-p "Kill current process?") (or (delete-process process) t))
       t)))
 
-(defvar python-shell--interpreter "python")
-(defvar python-shell--interpreter-args "-i")
-
 (defun django-commands--run-command (buffer mode args)
   "Run command based on MODE with ARGS in BUFFER."
-  (when (django-commands--kill-current-process buffer)
+  (when (django-commands--kill-current-process-p buffer)
     (with-current-buffer buffer
       (let ((inhibit-read-only t))
         (erase-buffer))
       (hack-dir-local-variables-non-file-buffer)
       (apply #'make-comint-in-buffer (django-commands--mode-name mode) buffer django-commands-python-executable nil (append (list django-commands-manage-module (django-commands--mode-command mode)) args))
+      (when (provided-mode-derived-p mode 'inferior-python-mode)
+        ;; `inferior-python-mode' wants this variables
+        (defvar python-shell--interpreter "python")
+        (defvar python-shell--interpreter-args "-i"))
       (funcall mode)
       (setq
        list-buffers-directory (abbreviate-file-name default-directory)
@@ -212,36 +229,36 @@ Reuse current buffer or buffer with same name without living process otherwise c
 ;; Interactive funcs
 
 ;;;###autoload
-(defun django-shell ()
+(defun django-commands-shell ()
   "Run shell command.
 If run with universal argument allow to edit command arguments"
   (interactive)
-  (django-commands--command #'django-shell-mode))
+  (django-commands--command #'django-commands-shell-mode))
 
 ;;;###autoload
-(defun django-server ()
+(defun django-commands-server ()
   "Run server command.
 If run with universal argument allow to edit command arguments"
   (interactive)
-  (django-commands--command #'django-server-mode))
+  (django-commands--command #'django-commands-server-mode))
 
 ;;;###autoload
-(defun django-test ()
+(defun django-commands-test ()
   "Ask for test name and run test."
   (interactive)
-  (django-commands--command #'django-test-mode (save-match-data (split-string (read-from-minibuffer "Test name: " (funcall django-commands-test-name-function))))))
+  (django-commands--command #'django-commands-test-mode (save-match-data (split-string (read-from-minibuffer "Test name: " (funcall django-commands-test-name-function))))))
 
 ;;;###autoload
-(defun django-restart ()
+(defun django-commands-restart ()
   "Restart django command associated with buffer.
 If run with universal argument allow to edit command arguments"
   (interactive)
-  (unless (derived-mode-p 'django-command-mode 'django-shell-mode)
+  (unless (derived-mode-p 'django-commands-command-mode 'django-commands-shell-mode)
     (user-error "No django command in this buffer"))
   (django-commands--run-command (current-buffer) major-mode (django-commands--confirm-args (save-match-data (split-string django-commands--current-args)))))
 
 ;;;###autoload
-(defun django-test-name ()
+(defun django-commands-test-name ()
   "Return name of test case to run."
   (let ((project-dir (cdr (project-current))))
     (when (and project-dir buffer-file-name)

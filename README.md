@@ -27,25 +27,25 @@ Put `django-commands.el` somewhere in your load path and add this to `init.el`:
 
 ### Interactive commands
 
-#### `django-shell`
+#### `django-commands-shell`
 
-Runs shell command in `django-shell-mode`. It's derived from `inferior-python-mode` so there are native completions and pdb tracking mode.
+Runs shell command in `django-commands-shell-mode`. It's derived from `inferior-python-mode` so there are native completions and pdb tracking mode.
 
-#### `django-server`
+#### `django-commands-server`
 
 Runs server command in comint-mode with pdb tracking mode and `compilation-shell-minor-mode`.
 
-#### `django-test`
+#### `django-commands-test`
 
 Asks test name to run and then runs test command in comint-mode with pdb tracking enabled and `compilation-shell-minor-mode`.
 
-#### `django-restart`
+#### `django-commands-restart`
 
-Being runned in one of django-mode buffers restarts current django command.
+Being runned in one of django-commands-mode buffers restarts current django command.
 
 ### Commands arguments
 
-If command is invoked with prefix argument (for ex. `C-u M-x django-shell <RET>`) it allow to edit command arguments.
+If command is invoked with prefix argument (for ex. `C-u M-x django-commands-shell <RET>`) it allow to edit command arguments.
 
 ## Customization
 
@@ -60,7 +60,7 @@ Also all variables can be customized through `dir-locals.el`. For example, you c
          (django-commands-settings-module . "settings.module.name"))))
 ```
 
-## Filtering django-server output
+## Filtering django-commands-server output
 
 It may be useful to filter out some django server output. For example, don't output static files request and print out separator between server restarts:
 
@@ -69,7 +69,7 @@ It may be useful to filter out some django server output. For example, don't out
   (cond ((string-match-p "^\\[[^]]+\\] .*\"GET /static/" string) "")
         ((string-prefix-p "Performing system checks...\n" string) (format "\f\n%s" string))
          (t string)))
-(add-hook 'django-server-mode-hook
+(add-hook 'django-commands-server-mode-hook
           #'(lambda()
               (page-break-lines-mode)
               (add-to-list 'comint-preoutput-filter-functions #'my/django-server-preoutput-filter)))
