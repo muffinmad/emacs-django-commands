@@ -8,6 +8,8 @@
 ;; Package-Version: 1.0
 
 ;;; Commentary:
+;;
+;; This package allow to run django commands in GNU Emacs
 
 ;;; Code:
 
