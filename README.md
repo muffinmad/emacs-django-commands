@@ -1,3 +1,5 @@
+[![MELPA](http://melpa.org/packages/django-commands-badge.svg)](http://melpa.org/#/django-commands)
+
 # emacs-django-commands
 
 This package allows to run django commands in GNU Emacs
@@ -6,14 +8,17 @@ This package allows to run django commands in GNU Emacs
 
 ### Dependencies
 
-Packages shipped with GNU Emacs: `compile`, `project`,  `python` and `which-func`
+Packages shipped with GNU Emacs: `compile`, `project`, `python` and `which-func`
 
 ### With `package.el`
 
-Download `django-commands.el` and run:
-``` el
-M-x package-install-file RET <path-to-django-commands-el> RET
-```
+`django-commands` available on [MELPA](http://melpa.org):
+
+<kbd>M-x</kbd> `package-install` <kbd>RET</kbd> `django-commands` <kbd>RET</kbd>.
+
+Alternatively, you can download `django-commands.el` and run:
+
+<kbd>M-x</kbd> `package-install-file` <kbd>RET</kbd> `<path-to-django-commands-el>` <kbd>RET</kbd>
 
 ### Without `package.el`
 
