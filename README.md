@@ -14,11 +14,11 @@ Packages shipped with GNU Emacs: `compile`, `project`, `python` and `which-func`
 
 `django-commands` available on [MELPA](http://melpa.org):
 
-<kbd>M-x</kbd> `package-install` <kbd>RET</kbd> `django-commands` <kbd>RET</kbd>.
+<kbd>M-x</kbd> `package-install` <kbd><RET></kbd> `django-commands` <kbd><RET></kbd>.
 
 Alternatively, you can download `django-commands.el` and run:
 
-<kbd>M-x</kbd> `package-install-file` <kbd>RET</kbd> `<path-to-django-commands-el>` <kbd>RET</kbd>
+<kbd>M-x</kbd> `package-install-file` <kbd><RET></kbd> `<path-to-django-commands-el>` <kbd><RET></kbd>
 
 ### Without `package.el`
 
@@ -50,11 +50,11 @@ Being runned in one of django-commands-mode buffers restarts current django comm
 
 ### Commands arguments
 
-If command is invoked with prefix argument (for ex. `C-u M-x django-commands-shell <RET>`) it allow to edit command arguments.
+If command is invoked with prefix argument (for ex. <kbd>C-u</kbd> <kbd>M-x</kbd> `django-commands-shell` <kbd><RET></kbd>) it allow to edit command arguments.
 
 ## Customization
 
-`M-x customize-group <RET> django-commands <RET>`
+<kbd>M-x</kbd> `customize-group` <kbd><RET></kbd> `django-commands` <kbd><RET></kbd>
 
 For each command you can specify command name and default arguments.
 
