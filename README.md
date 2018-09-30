@@ -52,6 +52,12 @@ Being runned in one of django-commands-mode buffers restarts current django comm
 
 If command is invoked with prefix argument (for ex. <kbd>C-u</kbd> <kbd>M-x</kbd> `django-commands-shell` <kbd>RET</kbd>) it allow to edit command arguments.
 
+## Key bindings
+
+| Key | Description |
+|-----|-------------|
+| <kbd>C-c r</kbd> | Call `django-commands-restart` |
+
 ## Customization
 
 <kbd>M-x</kbd> `customize-group` <kbd>RET</kbd> `django-commands` <kbd>RET</kbd>
