@@ -1,4 +1,5 @@
 [![MELPA](http://melpa.org/packages/django-commands-badge.svg)](http://melpa.org/#/django-commands)
+[![MELPA Stable](http://stable.melpa.org/packages/django-commands-badge.svg)](http://stable.melpa.org/#/django-commands)
 
 # emacs-django-commands
 
