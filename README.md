@@ -1,4 +1,4 @@
-[![License GPL 3][badge-license]][copying]
+[![License GPL 3](https://img.shields.io/badge/license-GPL_3-green.svg)](http://www.gnu.org/copyleft/gpl.html)
 [![MELPA](http://melpa.org/packages/django-commands-badge.svg)](http://melpa.org/#/django-commands)
 [![MELPA Stable](http://stable.melpa.org/packages/django-commands-badge.svg)](http://stable.melpa.org/#/django-commands)
 
