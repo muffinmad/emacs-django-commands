@@ -5,7 +5,7 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-django-commands
-;; Package-Version: 1.1
+;; Package-Version: 1.2
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -119,14 +119,14 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
 (defvar django-commands-shell-mode-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map inferior-python-mode-map)
-    (define-key map (kbd "C-c r") #'django-commands-restart)
+    (define-key map (kbd "C-c C-q") #'django-commands-restart)
     map)
   "Keymap for django shell mode.")
 
 (defvar django-commands-command-mode-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map comint-mode-map)
-    (define-key map (kbd "C-c r") #'django-commands-restart)
+    (define-key map (kbd "C-c C-q") #'django-commands-restart)
     map)
   "Keymap for django commad modes.")
 

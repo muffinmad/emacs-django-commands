@@ -58,7 +58,7 @@ If command is invoked with prefix argument (for ex. <kbd>C-u</kbd> <kbd>M-x</kbd
 
 | Key | Description |
 |-----|-------------|
-| <kbd>C-c r</kbd> | Call `django-commands-restart` |
+| <kbd>C-c C-q</kbd> | Call `django-commands-restart` |
 
 ## Customization
 
