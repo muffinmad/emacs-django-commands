@@ -287,7 +287,7 @@ If run with universal argument allow to edit command arguments"
 (defun django-commands-test ()
   "Ask for test name and run test."
   (interactive)
-  (django-commands--command #'django-commands-test-mode (save-match-data (split-string (read-from-minibuffer "Test name: " (funcall django-commands-test-name-function))))))
+  (django-commands--command #'django-commands-test-mode (split-string (read-from-minibuffer "Test name: " (funcall django-commands-test-name-function)))))
 
 ;;;###autoload
 (defun django-commands-restart ()
@@ -296,14 +296,14 @@ If run with universal argument allow to edit command arguments"
   (interactive)
   (unless (derived-mode-p 'django-commands-command-mode 'django-commands-shell-mode)
     (user-error "No django command in this buffer"))
-  (django-commands--run-command (current-buffer) major-mode (django-commands--confirm-args (save-match-data (split-string django-commands--current-args)))))
+  (django-commands--run-command (current-buffer) major-mode (django-commands--confirm-args (split-string django-commands--current-args))))
 
 ;;;###autoload
 (defun django-commands-test-name ()
   "Return name of test case to run."
   (let ((project-dir (cdr (project-current))))
     (when (and project-dir buffer-file-name)
-      (let* ((module-name (save-match-data (split-string (file-relative-name (file-name-sans-extension buffer-file-name) project-dir) "/")))
+      (let* ((module-name (split-string (file-relative-name (file-name-sans-extension buffer-file-name) project-dir) "/"))
              (func-name (which-function))
              (func-name (when func-name (list func-name))))
         (mapconcat 'identity (append module-name func-name) ".")))))
