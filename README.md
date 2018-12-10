@@ -52,7 +52,9 @@ Being runned in one of django-commands-mode buffers restarts current django comm
 
 ### Commands arguments
 
-If command is invoked with prefix argument (for ex. <kbd>C-u</kbd> <kbd>M-x</kbd> `django-commands-shell` <kbd>RET</kbd>) it allow to edit command arguments.
+If command is invoked with prefix argument (e.g. <kbd>C-u</kbd> <kbd>M-x</kbd> `django-commands-shell` <kbd>RET</kbd>) it allow to edit command arguments.
+
+If command is invoked with prefix numeric value greater 4 (e.g. <kbd>C-u</kbd> <kbd>C-u</kbd> <kbd>M-x</kbd> `django-commands-shell` <kbd>RET</kbd>) it also prompt for project directory.
 
 ## Key bindings
 
@@ -72,6 +74,10 @@ Also all variables can be customized through `dir-locals.el`. For example, you c
 ((nil . ((django-commands-python-executable . "~/.virtualenvs/virtualenvname/bin/python")
          (django-commands-settings-module . "settings.module.name"))))
 ```
+
+### Projects directory
+
+You can set `django-commands-projects-dir` to directory containing all your projects (e.g. `~/workspace`), then all prompts for project directory will be started in that directory.
 
 ## Filtering django-commands-server output
 
