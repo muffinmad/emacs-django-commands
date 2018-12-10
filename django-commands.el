@@ -107,6 +107,13 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
   "Function to return name of a test to be run."
   :type 'function)
 
+(defcustom django-commands-projects-dir nil
+  "Directory to read project directory in.
+If specified, project directory selection will start in this directory."
+  :type '(choice
+          (const :tag "No projects dir" nil)
+          (directory)))
+
 
 
 ;; Local vars
@@ -168,7 +175,8 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
   "Get project root directory."
   (let ((dir (cdr-safe (project-current))))
     (if (or (null dir) (> (prefix-numeric-value current-prefix-arg) 4))
-        (abbreviate-file-name (read-directory-name "Choose django project directory: " dir nil t))
+        (abbreviate-file-name
+         (read-directory-name "Choose django project directory: " (or django-commands-projects-dir dir) nil t))
       dir)))
 
 (defun django-commands--project-name (project-dir)
