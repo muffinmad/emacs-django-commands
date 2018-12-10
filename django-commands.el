@@ -166,7 +166,10 @@ If nil then DJANGO_SETTINGS_MODULE environment variable will be used."
 
 (defun django-commands--project-dir ()
   "Get project root directory."
-  (or (cdr (project-current t)) (user-error "No project")))
+  (let ((dir (cdr-safe (project-current))))
+    (if (or (null dir) (> (prefix-numeric-value current-prefix-arg) 4))
+        (abbreviate-file-name (read-directory-name "Choose django project directory: " dir nil t))
+      dir)))
 
 (defun django-commands--project-name (project-dir)
   "Get project name based on PROJECT-DIR."
