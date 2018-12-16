@@ -173,7 +173,7 @@ If specified, project directory selection will start in this directory."
 
 (defun django-commands--project-dir ()
   "Get project root directory."
-  (let ((dir (cdr-safe (project-current))))
+  (let ((dir (cdr (project-current))))
     (if (or (null dir) (> (prefix-numeric-value current-prefix-arg) 4))
         (abbreviate-file-name
          (read-directory-name "Choose django project directory: " (or django-commands-projects-dir dir) nil t))
