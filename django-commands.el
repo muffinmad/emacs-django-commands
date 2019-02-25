@@ -1,11 +1,11 @@
 ;;; django-commands.el --- Run django commands -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018 Andrii Kolomoiets
+;; Copyright (C) 2018-2019 Andrii Kolomoiets
 
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-django-commands
-;; Package-Version: 1.3
+;; Package-Version: 1.3.1
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -298,7 +298,11 @@ If run with universal argument allow to edit command arguments"
 (defun django-commands-test ()
   "Ask for test name and run test."
   (interactive)
-  (django-commands--command #'django-commands-test-mode (split-string (read-from-minibuffer "Test name: " (funcall django-commands-test-name-function)))))
+  (let* ((test-name (funcall django-commands-test-name-function))
+         (test-name (split-string (if current-prefix-arg
+                                      test-name
+                                    (read-from-minibuffer "Test name: " test-name)))))
+    (django-commands--command #'django-commands-test-mode test-name)))
 
 ;;;###autoload
 (defun django-commands-restart ()
