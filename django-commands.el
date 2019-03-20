@@ -5,7 +5,7 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-django-commands
-;; Package-Version: 1.3.1
+;; Package-Version: 1.3.2
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -154,9 +154,10 @@ If specified, project directory selection will start in this directory."
   "Major mode for django commands.
 
 \\{django-commands-command-mode-map}"
-  (add-to-list 'comint-output-filter-functions #'comint-truncate-buffer)
-  (add-to-list 'comint-output-filter-functions #'django-commands--clear-undo-output-filter t)
-  (add-to-list 'comint-output-filter-functions #'python-pdbtrack-comint-output-filter-function t)
+  (let ((l (make-local-variable 'comint-output-filter-functions)))
+    (add-to-list l #'comint-truncate-buffer)
+    (add-to-list l #'django-commands--clear-undo-output-filter t)
+    (add-to-list l #'python-pdbtrack-comint-output-filter-function t))
   (set (make-local-variable 'compilation-error-regexp-alist)
        python-shell-compilation-regexp-alist)
   (compilation-shell-minor-mode 1))
