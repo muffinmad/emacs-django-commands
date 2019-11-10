@@ -231,7 +231,7 @@ Reuse current buffer or buffer with same name without living process otherwise c
 (defun django-commands--confirm-args (args)
   "Confirm ARGS if `current-prefix-arg'."
   (if current-prefix-arg
-      (save-match-data (split-string (read-from-minibuffer "Args: " (mapconcat 'identity args " "))))
+      (split-string-and-unquote (read-from-minibuffer "Args: " (mapconcat 'identity args " ")))
     args))
 
 (defun django-commands--mode-command (mode)
