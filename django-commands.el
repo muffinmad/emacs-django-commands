@@ -5,7 +5,7 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-django-commands
-;; Package-Version: 1.3.3
+;; Package-Version: 1.4
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -178,7 +178,9 @@ If specified, project directory selection will start in this directory."
 
 (defun django-commands--project-dir ()
   "Get project root directory."
-  (let ((dir (cdr (project-current))))
+  (let ((dir (if (fboundp 'project-root)
+                 (project-root (project-current))
+               (cdr (project-current)))))
     (if (or (null dir) (> (prefix-numeric-value current-prefix-arg) 4))
         (abbreviate-file-name
          (read-directory-name "Choose django project directory: " (or django-commands-projects-dir dir) nil t))
@@ -321,7 +323,9 @@ If run with universal argument allow to edit command arguments"
 ;;;###autoload
 (defun django-commands-test-name ()
   "Return name of test case to run."
-  (let ((project-dir (cdr (project-current))))
+  (let ((project-dir (if (fboundp 'project-root)
+                         (project-root (project-current))
+                       (cdr (project-current)))))
     (when (and project-dir buffer-file-name)
       (let* ((module-name (split-string (file-relative-name (file-name-sans-extension buffer-file-name) project-dir) "/"))
              (func-name (which-function))
