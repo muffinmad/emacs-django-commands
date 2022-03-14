@@ -5,7 +5,7 @@
 ;; Author: Andrii Kolomoiets <andreyk.mad@gmail.com>
 ;; Keywords: tools
 ;; URL: https://github.com/muffinmad/emacs-django-commands
-;; Package-Version: 1.4
+;; Package-Version: 1.4.1
 ;; Package-Requires: ((emacs "25.1"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -176,11 +176,17 @@ If specified, project directory selection will start in this directory."
 
 ;; Funcs
 
+(defun django-commands--project-root-current ()
+  "Get current project root."
+  (let ((project (project-current)))
+    (when project
+      (if (fboundp 'project-root)
+          (project-root project)
+        (cdr project)))))
+
 (defun django-commands--project-dir ()
   "Get project root directory."
-  (let ((dir (if (fboundp 'project-root)
-                 (project-root (project-current))
-               (cdr (project-current)))))
+  (let ((dir (django-commands--project-root-current)))
     (if (or (null dir) (> (prefix-numeric-value current-prefix-arg) 4))
         (abbreviate-file-name
          (read-directory-name "Choose django project directory: " (or django-commands-projects-dir dir) nil t))
@@ -323,9 +329,7 @@ If run with universal argument allow to edit command arguments"
 ;;;###autoload
 (defun django-commands-test-name ()
   "Return name of test case to run."
-  (let ((project-dir (if (fboundp 'project-root)
-                         (project-root (project-current))
-                       (cdr (project-current)))))
+  (let ((project-dir (django-commands--project-root-current)))
     (when (and project-dir buffer-file-name)
       (let* ((module-name (split-string (file-relative-name (file-name-sans-extension buffer-file-name) project-dir) "/"))
              (func-name (which-function))
